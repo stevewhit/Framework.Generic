@@ -5,7 +5,6 @@ using Framework.Generic.Utility;
 using Framework.Generic.Tests.Builders;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace Framework.Generic.Tests.Utility
 {
