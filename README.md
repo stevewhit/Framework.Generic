@@ -1,2 +1,2 @@
 # Framework.Generic
-C# .NET Library that contains the generic components to create a .NET Application
+C# .NET repository that contains the generic components to create any console or web application.
