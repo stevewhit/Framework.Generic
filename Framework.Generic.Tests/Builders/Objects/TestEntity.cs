@@ -30,7 +30,7 @@ namespace Framework.Generic.Tests.Builders
         /// </summary>
         public bool IsVirtual { get; set; }
 
-        public TestEntity() : this(false) { }
+        public TestEntity() : this(0, false) { }
         public TestEntity(bool isVirtual = false)
         {
             TestId = Guid.NewGuid();
@@ -38,10 +38,10 @@ namespace Framework.Generic.Tests.Builders
             IsVirtual = isVirtual;
         }
 
-        public TestEntity(int id, bool isVirtual = false) : this(isVirtual)
+        public TestEntity(int value, bool isVirtual = false) : this(isVirtual)
         {
-            StoredValue = id;
-            CurrentValue = id;
+            StoredValue = value;
+            CurrentValue = value;
         }
     }
 }
