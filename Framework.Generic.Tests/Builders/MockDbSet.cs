@@ -6,10 +6,6 @@ using System.Data.Entity;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Data.Entity.Infrastructure;
-using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
-using Framework.Generic.EntityFramework;
 
 namespace Framework.Generic.Tests.Builders
 {

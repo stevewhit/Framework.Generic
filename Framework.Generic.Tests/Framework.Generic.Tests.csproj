@@ -47,7 +47,7 @@
     <Compile Include="Builders\MockLog.cs" />
     <Compile Include="Builders\Objects\TestEntity.cs" />
     <Compile Include="Builders\Objects\TestEnums.cs" />
-    <Compile Include="EntityFramework\EfContextTest.cs" />
+    <Compile Include="EntityFramework\MockEfContextTest.cs" />
     <Compile Include="EntityFramework\EfRepositoryTest.cs" />
     <Compile Include="Utility\EnumUtilsTest.cs" />
     <Compile Include="Utility\EnumerableUtilsTest.cs" />

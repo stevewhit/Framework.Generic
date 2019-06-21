@@ -15,7 +15,7 @@ namespace Framework.Generic.Tests.EntityFramework
     /// </summary>
     [TestClass]
     [ExcludeFromCodeCoverage]
-    public class EfContextTest
+    public class MockEfContextTest
     {        
         private MockEfContext _mockContext;
 
