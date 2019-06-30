@@ -1,43 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using System.Linq;
 
 namespace Framework.Generic.EntityFramework
 {
     public interface IEfRepository<TEntity> : IDisposable where TEntity : class
     {
         IDbSet<TEntity> GetEntities();
-        Task<IEnumerable<TEntity>> GetEntitiesAsync();
-        Task<IEnumerable<TEntity>> GetEntitiesWhereAsync(Expression<Func<TEntity, bool>> expression);
-
-        void Create(TEntity entity);
+        void Add(TEntity entity);
+        void AddRange(IEnumerable<TEntity> entities);
         void Update(TEntity entity);
         void Delete(TEntity entity);
-
         void SaveChanges();
-        Task SaveChangesAsync();
         void RevertChanges();
-        Task RevertChangesAsync();
     }
 
     public class EfRepository<TEntity> : IEfRepository<TEntity> where TEntity : class
     {
         private bool _isDisposed = false;
-
-        /// <summary>
-        /// The context for this repository.
-        /// </summary>
-        protected IEfContext Context { get; private set; }
+        private readonly IEfContext _context;
 
         public EfRepository(IEfContext context)
         {
             if (context == null)
                 throw new ArgumentNullException("context");
 
-            Context = context;
+            _context = context;
         }
 
         #region IEFRepository<TEntity> Support
@@ -47,31 +35,26 @@ namespace Framework.Generic.EntityFramework
         /// </summary>
         public IDbSet<TEntity> GetEntities()
         {
-            return Context.Get<TEntity>();
-        }
-
-        /// <summary>
-        /// Returns the entity set in the repository asyncronously.
-        /// </summary>
-        public async Task<IEnumerable<TEntity>> GetEntitiesAsync()
-        {
-            return await GetEntities().ToListAsync();
+            return _context.Get<TEntity>();
         }
         
-        /// <summary>
-        /// Returns the entity set in the repository asyncronously after applying the predicate "Where" filter.
-        /// </summary>
-        public async Task<IEnumerable<TEntity>> GetEntitiesWhereAsync(Expression<Func<TEntity, bool>> predicate)
-        {
-            return await GetEntities().Where(predicate).ToListAsync();
-        }
         
         /// <summary>
         /// Inserts a new TEntity object into the entity set. Note: Changes are not saved.
         /// </summary>
-        public virtual void Create(TEntity entity)
+        public virtual void Add(TEntity entity)
         {
-            Context.Create(entity);
+            _context.Add(entity);
+        }
+
+        /// <summary>
+        /// Inserts new TEntity objects into the entity set. Note: Changes are not saved.
+        /// </summary>
+        /// <param name="entities"></param>
+        public void AddRange(IEnumerable<TEntity> entities)
+        {
+            foreach (var entity in entities)
+                Add(entity);
         }
 
         /// <summary>
@@ -79,7 +62,7 @@ namespace Framework.Generic.EntityFramework
         /// </summary>
         public virtual void Update(TEntity entity)
         {
-            Context.Update(entity);
+            _context.Update(entity);
         }
 
         /// <summary>
@@ -87,10 +70,10 @@ namespace Framework.Generic.EntityFramework
         /// </summary>
         public virtual void Delete(TEntity entity)
         {
-            if (Context.GetEntityState(entity) == EntityState.Detached)
+            if (_context.GetEntityState(entity) == EntityState.Detached)
                 GetEntities().Attach(entity);
 
-            Context.Delete(entity);
+            _context.Delete(entity);
         }
 
         /// <summary>
@@ -98,32 +81,18 @@ namespace Framework.Generic.EntityFramework
         /// </summary>
         public virtual void SaveChanges()
         {
-            Context.SaveChanges();
+            _context.SaveChanges();
         }
 
-        /// <summary>
-        /// Saves and finalizes any changes to this repository asynchronously. 
-        /// </summary>
-        public virtual async Task SaveChangesAsync()
-        {
-            await Context.SaveChangesAsync();
-        }
 
         /// <summary>
         /// Reverts any changes that have been made to this repository.
         /// </summary>
         public virtual void RevertChanges()
         {
-            Context.RevertChanges();
+            _context.RevertChanges();
         }
 
-        /// <summary>
-        /// Reverts any changes that have been made to this repository asynchronously.
-        /// </summary>
-        public async virtual Task RevertChangesAsync()
-        {
-            await Context.RevertChangesAsync();
-        }
 
         /// <summary>
         /// Disposes this object and properly cleans up resources. 
@@ -134,8 +103,7 @@ namespace Framework.Generic.EntityFramework
             {
                 if (disposing)
                 {
-                    Context.Dispose();
-                    Context = null;
+                    _context.Dispose();
                 }
 
                 _isDisposed = true;

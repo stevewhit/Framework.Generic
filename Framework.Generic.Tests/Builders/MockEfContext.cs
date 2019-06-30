@@ -141,7 +141,7 @@ namespace Framework.Generic.Tests.Builders
 
         private void SetupCreate<T>() where T : class, ITestEntity
         {
-            Setup(c => c.Create<T>(It.IsAny<T>()))
+            Setup(c => c.Add<T>(It.IsAny<T>()))
                 .Callback((T entity) =>
                 {
                     entity.IsVirtual = true;

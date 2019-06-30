@@ -216,7 +216,7 @@ namespace Framework.Generic.Tests.EntityFramework
         public void Create_NullEntity_ThrowsException()
         {
             // Act
-            _mockContext.Object.Create<TestEntity>(null);
+            _mockContext.Object.Add<TestEntity>(null);
         }
 
         [TestMethod]
@@ -226,7 +226,7 @@ namespace Framework.Generic.Tests.EntityFramework
             var entityToAdd = new TestEntity(999);
 
             // Act
-            _mockContext.Object.Create(entityToAdd);
+            _mockContext.Object.Add(entityToAdd);
 
             var entitiesContainsNewEntity = _mockContext.GetDbSet<TestEntity>().Any(e => e.TestId == entityToAdd.TestId);
 
@@ -241,7 +241,7 @@ namespace Framework.Generic.Tests.EntityFramework
             var entityToAdd = new TestEntity(999);
 
             // Act
-            _mockContext.Object.Create(entityToAdd);
+            _mockContext.Object.Add(entityToAdd);
 
             // Assert
             Assert.IsTrue(entityToAdd.IsVirtual, "The entity should've been added to the entities dbset as a virtual entity.");
@@ -254,7 +254,7 @@ namespace Framework.Generic.Tests.EntityFramework
             var entityToAdd = new TestEntity(999);
 
             // Act
-            _mockContext.Object.Create(entityToAdd);
+            _mockContext.Object.Add(entityToAdd);
 
             // Assert
             Assert.IsTrue(entityToAdd.State == EntityState.Added, "The entity should've been added to the entities dbset with 'Added' state.");
@@ -358,7 +358,7 @@ namespace Framework.Generic.Tests.EntityFramework
             var entityToAdd = new TestEntity(999);
 
             // Act
-            _mockContext.Object.Create(entityToAdd);
+            _mockContext.Object.Add(entityToAdd);
             _mockContext.Object.SaveChanges();
 
             // Assert
@@ -373,7 +373,7 @@ namespace Framework.Generic.Tests.EntityFramework
             entityToAdd.CurrentValue = 111;
 
             // Act
-            _mockContext.Object.Create(entityToAdd);
+            _mockContext.Object.Add(entityToAdd);
             _mockContext.Object.SaveChanges();
 
             // Assert
@@ -434,7 +434,7 @@ namespace Framework.Generic.Tests.EntityFramework
             var entityToAdd = new TestEntity(999);
 
             // Act
-            _mockContext.Object.Create(entityToAdd);
+            _mockContext.Object.Add(entityToAdd);
             await _mockContext.Object.SaveChangesAsync();
 
             // Assert
@@ -449,7 +449,7 @@ namespace Framework.Generic.Tests.EntityFramework
             entityToAdd.CurrentValue = 111;
 
             // Act
-            _mockContext.Object.Create(entityToAdd);
+            _mockContext.Object.Add(entityToAdd);
             await _mockContext.Object.SaveChangesAsync();
 
             // Assert
@@ -560,7 +560,7 @@ namespace Framework.Generic.Tests.EntityFramework
             var entityToAdd = new TestEntity(999);
 
             // Act
-            _mockContext.Object.Create(entityToAdd);
+            _mockContext.Object.Add(entityToAdd);
             _mockContext.Object.RevertChanges();
 
             var revertedEntity = _mockContext.GetDbSet<TestEntity>().FirstOrDefault(e => e.TestId == entityToAdd.TestId);
@@ -661,7 +661,7 @@ namespace Framework.Generic.Tests.EntityFramework
             var entityToAdd = new TestEntity(999);
 
             // Act
-            _mockContext.Object.Create(entityToAdd);
+            _mockContext.Object.Add(entityToAdd);
             await _mockContext.Object.RevertChangesAsync();
 
             var revertedEntity = _mockContext.GetDbSet<TestEntity>().FirstOrDefault(e => e.TestId == entityToAdd.TestId);

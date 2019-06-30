@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -11,7 +12,8 @@ namespace Framework.Generic.EntityFramework
         IDbSet<TEntity> Get<TEntity>() where TEntity : class;
         void SetEntityState<TEntity>(TEntity entity, EntityState state) where TEntity : class;
         EntityState GetEntityState<TEntity>(TEntity entity) where TEntity : class;
-        void Create<TEntity>(TEntity entity) where TEntity : class;
+        void Add<TEntity>(TEntity entity) where TEntity : class;
+        void AddRange<TEntity>(IEnumerable<TEntity> entities) where TEntity : class;
         void Update<TEntity>(TEntity entity) where TEntity : class;
         void Delete<TEntity>(TEntity entity) where TEntity : class;
         int SaveChanges();
@@ -60,10 +62,21 @@ namespace Framework.Generic.EntityFramework
         /// <summary>
         /// Inserts a new entity object into the entity set. Note: Changes are not saved.
         /// </summary>
-        public virtual void Create<TEntity>(TEntity entity) where TEntity : class
+        public virtual void Add<TEntity>(TEntity entity) where TEntity : class
         {
             _context.Set<TEntity>().Add(entity);
             SetEntityState(entity, EntityState.Added);
+        }
+
+        /// <summary>
+        /// Inserts new entity objects into the entity set. Note: Changes are not saved.
+        /// </summary>
+        public virtual void AddRange<TEntity>(IEnumerable<TEntity> entities) where TEntity : class
+        {
+            _context.Set<TEntity>().AddRange(entities);
+
+            foreach(var entity in entities)
+                SetEntityState(entity, EntityState.Added);
         }
 
         /// <summary>

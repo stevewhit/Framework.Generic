@@ -68,84 +68,24 @@ namespace Framework.Generic.Tests.EntityFramework
         }
 
         #endregion
-        #region Testing GetEntitiesAsync...
-
-        [TestMethod]
-        public async Task GetEntitiesAsync_WithNoData_ReturnsEmpty()
-        {
-            // Act
-            var data = await _repository.GetEntitiesAsync();
-
-            // Assert
-            Assert.IsNotNull(data, "The data should not be null with loaded entities.");
-            Assert.IsTrue(data.Count() == 0, "The repository should have no loaded entities.");
-        }
-
-        [TestMethod]
-        public async Task GetEntitiesAsync_WithValidData_ReturnsData()
-        {
-            // Arrange            
-            var entity1 = new TestEntity(999);
-            _repository.GetEntities().Add(entity1);
-
-            var entity2 = new TestEntity(111);
-            _repository.GetEntities().Add(entity2);
-
-            // Act
-            var data = await _repository.GetEntitiesAsync();
-            
-            // Assert
-            Assert.IsNotNull(data, "The data should not be null with loaded entities.");
-            Assert.IsTrue(data.Count() == 2, "The repository should have loaded entities.");
-        }
-
-        #endregion
-        #region Testing GetEntitiesWhereAsync...
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public async Task GetEntitiesWhereAsync_WithNullPredicate_ThrowsException()
-        {
-            // Act
-            var data = await _repository.GetEntitiesWhereAsync(null);
-        }
-
-        [TestMethod]
-        public async Task GetEntitiesWhereAsync_WithValidPredicate_ReturnsFilteredResults()
-        {
-            // Arrange
-            var entity1 = new TestEntity(999);
-            _repository.GetEntities().Add(entity1);
-
-            var entity2 = new TestEntity(888);
-            _repository.GetEntities().Add(entity2);
-
-            // Act
-            var data = await _repository.GetEntitiesWhereAsync(e => e.CurrentValue == 999);
-
-            // Assert
-            Assert.IsTrue(data.Count() == 1, "Only 1 entity should've been returned with the supplied filter.");
-        }
-
-        #endregion
-        #region Testing Create...
+        #region Testing Add...
 
         [TestMethod]
         [ExpectedException(typeof(NullReferenceException))]
-        public void Create_WithNullEntity_ThrowsException()
+        public void Add_WithNullEntity_ThrowsException()
         {
             // Act
-            _repository.Create(null);
+            _repository.Add(null);
         }
 
         [TestMethod]
-        public void Create_WithValidEntity_AddsVirtualEntity()
+        public void Add_WithValidEntity_AddsVirtualEntity()
         {
             // Arrange
             var entityToAdd = new TestEntity(999);
 
             // Act
-            _repository.Create(entityToAdd);
+            _repository.Add(entityToAdd);
 
             var entitiesContainsNewEntity = _repository.GetEntities().Any(e => e.TestId == entityToAdd.TestId);
 
@@ -271,7 +211,7 @@ namespace Framework.Generic.Tests.EntityFramework
             var entityToInsert = new TestEntity(999);
 
             // Act
-            _repository.Create(entityToInsert);
+            _repository.Add(entityToInsert);
             _repository.SaveChanges();
 
             // Assert
@@ -286,7 +226,7 @@ namespace Framework.Generic.Tests.EntityFramework
             entityToInsert.StoredValue = 111;
 
             // Act
-            _repository.Create(entityToInsert);
+            _repository.Add(entityToInsert);
             _repository.SaveChanges();
 
             // Assert
@@ -301,7 +241,7 @@ namespace Framework.Generic.Tests.EntityFramework
             entityToInsert.StoredValue = 111;
 
             // Act
-            _repository.Create(entityToInsert);
+            _repository.Add(entityToInsert);
             _repository.SaveChanges();
 
             // Assert
@@ -352,104 +292,6 @@ namespace Framework.Generic.Tests.EntityFramework
             // Act
             _repository.Delete(entity);
             _repository.SaveChanges();
-
-            var repoContainsEntity = _repository.GetEntities().Any(e => e.TestId == entity.TestId);
-
-            // Assert
-            Assert.IsFalse(repoContainsEntity, "Entities list should no longer contain an entity with the matching id.");
-        }
-
-        #endregion
-        #region Testing SaveChangesAsync...
-
-        [TestMethod]
-        public async Task SaveChangesAsync_AfterInsertedEntity_AddsEntity()
-        {
-            // Arrange
-            var entityToInsert = new TestEntity(999);
-
-            // Act
-            _repository.Create(entityToInsert);
-            await _repository.SaveChangesAsync();
-
-            // Assert
-            Assert.IsTrue(entityToInsert.State == EntityState.Unchanged, "Any saved added entity should have an 'unchanged' state.");
-        }
-
-        [TestMethod]
-        public async Task SaveChangesAsync_AfterInsertedEntity_UpdatesStoredValue()
-        {
-            // Arrange
-            var entityToInsert = new TestEntity(999);
-            entityToInsert.StoredValue = 111;
-
-            // Act
-            _repository.Create(entityToInsert);
-            await _repository.SaveChangesAsync();
-
-            // Assert
-            Assert.IsTrue(entityToInsert.StoredValue == 999, "Stored value should have been updated to the 'CurrentValue' when saved.");
-        }
-
-        [TestMethod]
-        public async Task SaveChangesAsync_AfterInsertedEntity_MakesEntityNonVirtual()
-        {
-            // Arrange
-            var entityToInsert = new TestEntity(999);
-            entityToInsert.StoredValue = 111;
-
-            // Act
-            _repository.Create(entityToInsert);
-            await _repository.SaveChangesAsync();
-
-            // Assert
-            Assert.IsTrue(!entityToInsert.IsVirtual, "Inserted entities in the repository should be non-virtual once they are saved.");
-        }
-
-        [TestMethod]
-        public async Task SaveChangesAsync_AfterUpdatedEntity_UpdatesStoredValue()
-        {
-            // Arrange
-            var entity = new TestEntity(999);
-            _repository.GetEntities().Add(entity);
-
-            // Act
-            entity.CurrentValue = 111;
-
-            _repository.Update(entity);
-            await _repository.SaveChangesAsync();
-
-            // Assert
-            Assert.IsTrue(entity.StoredValue == 111, "Stored value should've been updated.");
-        }
-
-        [TestMethod]
-        public async Task SaveChangesAsync_AfterUpdatedEntity_UpdatesEntityStateToUnchanged()
-        {
-            // Arrange
-            var entity = new TestEntity(999);
-            _repository.GetEntities().Add(entity);
-
-            // Act
-            entity.CurrentValue = 111;
-
-            _repository.Update(entity);
-            await _repository.SaveChangesAsync();
-
-            // Assert
-            Assert.IsTrue(entity.State == EntityState.Unchanged, "Any updated entity should have an 'unchanged' state after being saved.");
-        }
-
-        [TestMethod]
-        public async Task SaveChangesAsync_AfterDeletedEntity_RemovesEntity()
-        {
-            // Arrange
-            var entity = new TestEntity(999);
-            _repository.GetEntities().Add(entity);
-
-            // Act
-            _repository.Delete(entity);
-            await _repository.SaveChangesAsync();
 
             var repoContainsEntity = _repository.GetEntities().Any(e => e.TestId == entity.TestId);
 
@@ -516,7 +358,7 @@ namespace Framework.Generic.Tests.EntityFramework
             var entity = new TestEntity(999);
 
             // Act
-            _repository.Create(entity);
+            _repository.Add(entity);
             _repository.RevertChanges();
 
             var repoContainsEntity = _repository.GetEntities().Any(e => e.TestId == entity.TestId);
@@ -535,91 +377,6 @@ namespace Framework.Generic.Tests.EntityFramework
             // Act
             _repository.Delete(entity);
             _repository.RevertChanges();
-
-            var repoContainsEntity = _repository.GetEntities().Any(e => e.TestId == entity.TestId);
-
-            // Assert
-            Assert.IsTrue(repoContainsEntity, "The entity set should contain the deleted entity after being reverted.");
-        }
-
-        #endregion
-        #region Testing RevertChangesAsync...
-
-        [TestMethod]
-        public async Task RevertChangesAsync_UpdatedEntity_RevertsValueChanges()
-        {
-            // Arrange
-            var entity = new TestEntity(999);
-            _repository.GetEntities().Add(entity);
-
-            // Act
-            entity.CurrentValue = 111;
-            _repository.Update(entity);
-            await _repository.RevertChangesAsync();
-
-            // Assert
-            Assert.IsTrue(entity.CurrentValue == 999, "When changes are reverted, the stored value should be updated to the previously stored value.");
-            Assert.IsTrue(entity.StoredValue == 999, "When changes are reverted, the stored value should be updated to the previously stored value.");
-        }
-
-        [TestMethod]
-        public async Task RevertChangesAsync_UpdatedEntity_RevertsEntityStateChange()
-        {
-            // Arrange
-            var entity = new TestEntity(999);
-            _repository.GetEntities().Add(entity);
-
-            // Act
-            entity.CurrentValue = 111;
-            _repository.Update(entity);
-            await _repository.RevertChangesAsync();
-
-            // Assert
-            Assert.IsTrue(entity.State == EntityState.Unchanged, "When changes are reverted, the entity state should be reverted to 'Unchanged'.");
-        }
-
-        [TestMethod]
-        public async Task RevertChangesAsync_RevertsEntityStateChanges()
-        {
-            // Arrange
-            var entity = new TestEntity(999);
-            entity.State = EntityState.Modified;
-
-            _repository.GetEntities().Add(entity);
-
-            // Act
-            await _repository.RevertChangesAsync();
-
-            // Assert
-            Assert.IsTrue(entity.State == EntityState.Unchanged, "When changes are reverted, the entity state should be reverted to 'Unchanged'.");
-        }
-
-        [TestMethod]
-        public async Task RevertChangesAsync_AfterInsertedEntity_RemovesEntity()
-        {
-            // Arrange
-            var entity = new TestEntity(999);
-
-            // Act
-            _repository.Create(entity);
-            await _repository.RevertChangesAsync();
-
-            var repoContainsEntity = _repository.GetEntities().Any(e => e.TestId == entity.TestId);
-
-            // Assert
-            Assert.IsFalse(repoContainsEntity, "The entity set should not contain the inserted entity after being reverted.");
-        }
-
-        [TestMethod]
-        public async Task RevertChangesAsync_AfterDeletedEntity_ReAttachesEntity()
-        {
-            // Arrange
-            var entity = new TestEntity(999);
-            _repository.GetEntities().Add(entity);
-
-            // Act
-            _repository.Delete(entity);
-            await _repository.RevertChangesAsync();
 
             var repoContainsEntity = _repository.GetEntities().Any(e => e.TestId == entity.TestId);
 
