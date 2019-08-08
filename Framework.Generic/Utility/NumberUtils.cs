@@ -6,11 +6,11 @@ namespace Framework.Generic.Utility
     public static class NumberUtils
     {
         /// <summary>
-        /// Generates a random number between min and max, exclusive.
+        /// Generates a random number between min and max, inclusive.
         /// </summary>
         /// <param name="min">The minimum value in the range that can be returned</param>
         /// <param name="max">The maximum value in the range that can be returned</param>
-        /// <returns>Returns a random number between min and max, exclusive</returns>
+        /// <returns>Returns a random number between min and max, inclusive</returns>
         public static int GenerateRandomNumber(int min, int max)
         {
             var rand = new RNGCryptoServiceProvider();

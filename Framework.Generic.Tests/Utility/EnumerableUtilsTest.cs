@@ -5,6 +5,8 @@ using Framework.Generic.Utility;
 using Framework.Generic.Tests.Builders;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Framework.Generic.Tests.Builders.Objects;
+using System.Linq;
 
 namespace Framework.Generic.Tests.Utility
 {
@@ -131,6 +133,47 @@ namespace Framework.Generic.Tests.Utility
             // Assert
             Assert.IsTrue(source.Count == sourceCount);
             Assert.IsTrue(source[0] != 0 || source[1] != 1, "The source should've been shuffled enough where atleast 2 items shouldn't be in the same location.");        
+        }
+
+        #endregion
+        #region void Dispose(this IEnumerable<IDisposable> disposableObjs)...
+
+        [TestMethod]
+        [ExpectedException(typeof(NullReferenceException))]
+        public void Dispose_WithNullObjects_ThrowsException()
+        {
+            // Arrange 
+            List<DisposableObject> disposableObjs = null;
+
+            // Act
+            disposableObjs.Dispose();
+        }
+
+        [TestMethod]
+        public void Dispose_WithEmptyObjects_DoesNothing()
+        {
+            // Arrange 
+            var disposableObjs = new List<DisposableObject>();
+
+            // Act
+            disposableObjs.Dispose();
+        }
+
+        [TestMethod]
+        public void Dispose_WithPopulatedObjects_DisposesAllObjects()
+        {
+            // Arrange 
+            var disposableObjs = new List<DisposableObject>();
+            int sourceCount = 100;
+
+            for (int i = 0; i < sourceCount; i++)
+                disposableObjs.Add(new DisposableObject());
+
+            // Act
+            disposableObjs.Dispose();
+
+            // Assert
+            Assert.IsTrue(disposableObjs.Count(o => o.IsDisposed == true) == sourceCount);
         }
 
         #endregion

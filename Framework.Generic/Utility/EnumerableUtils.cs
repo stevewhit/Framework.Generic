@@ -41,5 +41,15 @@ namespace Framework.Generic.Utility
 
             return source;
         }
+
+        /// <summary>
+        /// Disposes of each element in the enumerable.
+        /// </summary>
+        /// <param name="disposableObjs">The objects to be disposed.</param>
+        public static void Dispose(this IEnumerable<IDisposable> disposableObjs)
+        {
+            foreach (var obj in disposableObjs)
+                obj.Dispose();
+        }
     }
 }
