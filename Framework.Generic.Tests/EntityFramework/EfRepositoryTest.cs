@@ -6,6 +6,7 @@ using System.Data.Entity;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace Framework.Generic.Tests.EntityFramework
 {
@@ -91,6 +92,37 @@ namespace Framework.Generic.Tests.EntityFramework
 
             // Assert
             Assert.IsTrue(entitiesContainsNewEntity, "The entity should've been added to the entities dbset.");
+        }
+
+        #endregion
+        #region Testing void AddRange(IEnumerable<TEntity> entities)...
+
+        [TestMethod]
+        [ExpectedException(typeof(NullReferenceException))]
+        public void AddRange_WithNullEntities_ThrowsException()
+        {
+            // Act
+            _repository.AddRange(null);
+        }
+
+        [TestMethod]
+        public void AddRange_WithValidEntities_AddsVirtualEntities()
+        {
+            // Arrange
+            var entityToAdd1 = new TestEntity(999);
+            var entityToAdd2 = new TestEntity(999);
+
+            var entitiesToAdd = new List<TestEntity>() { entityToAdd1, entityToAdd2 };
+
+            // Act
+            _repository.AddRange(entitiesToAdd);
+
+            var entitiesContainsNewEntity1 = _repository.GetEntities().Any(e => e.TestId == entityToAdd1.TestId);
+            var entitiesContainsNewEntity2 = _repository.GetEntities().Any(e => e.TestId == entityToAdd2.TestId);
+
+            // Assert
+            Assert.IsTrue(entitiesContainsNewEntity1, "The entity should've been added to the entities dbset.");
+            Assert.IsTrue(entitiesContainsNewEntity2, "The entity should've been added to the entities dbset.");
         }
 
         #endregion
