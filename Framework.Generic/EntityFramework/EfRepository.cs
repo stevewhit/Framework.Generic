@@ -38,7 +38,6 @@ namespace Framework.Generic.EntityFramework
             return _context.Get<TEntity>();
         }
         
-        
         /// <summary>
         /// Inserts a new TEntity object into the entity set. Note: Changes are not saved.
         /// </summary>
