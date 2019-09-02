@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,6 +21,7 @@ namespace Framework.Generic.EntityFramework
         Task<int> SaveChangesAsync();
         void RevertChanges();
         Task RevertChangesAsync();
+        IEnumerable<TEntity> ExecuteStoredProcedure<TEntity>(string query, params SqlParameter[] parameters);
     }
     
     [ExcludeFromCodeCoverage]
@@ -145,6 +147,18 @@ namespace Framework.Generic.EntityFramework
         public virtual async Task RevertChangesAsync()
         {
             await Task.Run(() => RevertChanges());
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="name"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public virtual IEnumerable<TEntity> ExecuteStoredProcedure<TEntity>(string query, params SqlParameter[] parameters)
+        {
+            return _context.Database.SqlQuery<TEntity>(query, parameters);
         }
 
         /// <summary>
