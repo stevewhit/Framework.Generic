@@ -14,7 +14,16 @@ namespace Framework.Generic.Tests.Utility
         {
             
         }
+        #region Testing Property SystemTime.Now()
 
+        [TestMethod]
+        public void Now_ReturnsDateTimeNow()
+        {
+            // Assert
+            Assert.IsTrue(SystemTime.Now().Date == DateTime.Now.Date);
+        }
+
+        #endregion
         #region Testing void SetDateTime(DateTime dateTimeNow)
 
         [TestMethod]
