@@ -44,6 +44,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Builders\AsyncEnumerable.cs" />
+    <Compile Include="Builders\MockFileSystem.cs" />
     <Compile Include="Builders\Objects\CloneableObject.cs" />
     <Compile Include="Builders\MockDbSet.cs" />
     <Compile Include="Builders\MockEfContext.cs" />
@@ -53,6 +54,7 @@
     <Compile Include="Builders\Objects\TestEnums.cs" />
     <Compile Include="EntityFramework\MockEfContextTest.cs" />
     <Compile Include="EntityFramework\EfRepositoryTest.cs" />
+    <Compile Include="IO\JsonEntityFileTest.cs" />
     <Compile Include="Utility\EnumUtilsTest.cs" />
     <Compile Include="Utility\EnumerableUtilsTest.cs" />
     <Compile Include="Utility\SystemTimeTest.cs" />
@@ -96,6 +98,9 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.IO.Abstractions, Version=11.0.0.0, Culture=neutral, PublicKeyToken=96bf224d23c43e59, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Abstractions.11.0.2\lib\net461\System.IO.Abstractions.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.7.1\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
