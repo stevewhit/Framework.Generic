@@ -1,11 +1,10 @@
 ﻿using System;
-using System.IO;
 using System.IO.Abstractions;
 using Newtonsoft.Json;
 
 namespace Framework.Generic.IO
 {
-    public class JsonEntityFile<FEntity> : IEntityFile<FEntity> where FEntity : class
+    public class JsonEntityFile<FEntity> : IEntityFile<FEntity> where FEntity : ISerializedJsonObject
     {
         // Abstracted file system for better testability.
         private readonly IFileSystem _fileSystem;

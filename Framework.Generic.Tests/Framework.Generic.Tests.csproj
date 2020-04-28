@@ -52,6 +52,7 @@
     <Compile Include="Builders\Objects\DisposableObject.cs" />
     <Compile Include="Builders\Objects\TestEntity.cs" />
     <Compile Include="Builders\Objects\TestEnums.cs" />
+    <Compile Include="Builders\Objects\TestSerializedJsonEntity.cs" />
     <Compile Include="EntityFramework\MockEfContextTest.cs" />
     <Compile Include="EntityFramework\EfRepositoryTest.cs" />
     <Compile Include="IO\JsonEntityFileTest.cs" />

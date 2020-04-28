@@ -1,7 +1,7 @@
 ﻿
 namespace Framework.Generic.IO
 {
-    public interface IEntityFile<FEntity> where FEntity : class
+    public interface IEntityFile<FEntity> where FEntity : ISerializedObject
     {
         /// <summary>
         /// Returns the entity from the file path.

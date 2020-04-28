@@ -13,9 +13,7 @@ namespace Framework.Generic.Tests.Builders
             One, Two, Three, Four, Five
         };
 
-        private readonly string _privateString = "private string";
         private Numbers _privateNumber = Numbers.Three;
-        private readonly int _privateValue = 3;
 
         public string PublicString { get; set; } = "Public String";
         public Numbers PublicNumber { get; set; } = Numbers.Five;
@@ -44,6 +42,6 @@ namespace Framework.Generic.Tests.Builders
     [ExcludeFromCodeCoverage]
     internal class NotSerializableObject
     {
-        public int FakeObjectValue;
+
     }
 }

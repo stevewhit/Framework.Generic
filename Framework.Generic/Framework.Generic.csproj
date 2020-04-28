@@ -66,6 +66,8 @@
     <Compile Include="EntityFramework\EfContext.cs" />
     <Compile Include="EntityFramework\EfRepository.cs" />
     <Compile Include="IO\IEntityFile.cs" />
+    <Compile Include="IO\ISerializedJsonObject.cs" />
+    <Compile Include="IO\ISerializedObject.cs" />
     <Compile Include="IO\JsonEntityFile.cs" />
     <Compile Include="Utility\EnumerableUtils.cs" />
     <Compile Include="Utility\NumberUtils.cs" />

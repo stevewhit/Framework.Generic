@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Abstractions;
 using Framework.Generic.IO;
 using Framework.Generic.Tests.Builders;
+using Framework.Generic.Tests.Builders.Objects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Framework.Generic.Tests.IO
@@ -14,13 +15,13 @@ namespace Framework.Generic.Tests.IO
     {
         private const string _fakeFilePath = @"FakePath:\FakeDirectory\JsonEntityFileTests.txt";
         private IFileSystem _mockFileSystem;
-        private JsonEntityFile<TestEntity> _entityFile;
+        private JsonEntityFile<TestSerializedJsonEntity> _entityFile;
 
         [TestInitialize]
         public void Initialize()
         {
             _mockFileSystem = new MockFileSystem().Object;
-            _entityFile = new JsonEntityFile<TestEntity>(_fakeFilePath, _mockFileSystem);
+            _entityFile = new JsonEntityFile<TestSerializedJsonEntity>(_fakeFilePath, _mockFileSystem);
         }
 
         #region Testing JsonEntityFile(string filePath)...
@@ -30,7 +31,7 @@ namespace Framework.Generic.Tests.IO
         public void JsonEntityFileString_WithNullFilePath_ThrowsException()
         {
             // Act
-            _entityFile = new JsonEntityFile<TestEntity>(null);
+            _entityFile = new JsonEntityFile<TestSerializedJsonEntity>(null);
         }
 
         [TestMethod]
@@ -38,14 +39,14 @@ namespace Framework.Generic.Tests.IO
         public void JsonEntityFileString_WithEmptyFilePath_ThrowsException()
         {
             // Act
-            _entityFile = new JsonEntityFile<TestEntity>(string.Empty);
+            _entityFile = new JsonEntityFile<TestSerializedJsonEntity>(string.Empty);
         }
 
         [TestMethod]
         public void JsonEntityFileString_WithValidFilePath_IsNotNull()
         {
             // Act
-            _entityFile = new JsonEntityFile<TestEntity>(_fakeFilePath);
+            _entityFile = new JsonEntityFile<TestSerializedJsonEntity>(_fakeFilePath);
 
             // Assert
             Assert.IsNotNull(_entityFile);
@@ -59,7 +60,7 @@ namespace Framework.Generic.Tests.IO
         public void JsonEntityFileStringFileSystem_WithNullFilePath_ThrowsException()
         {
             // Act
-            _entityFile = new JsonEntityFile<TestEntity>(null, _mockFileSystem);
+            _entityFile = new JsonEntityFile<TestSerializedJsonEntity>(null, _mockFileSystem);
         }
 
         [TestMethod]
@@ -67,7 +68,7 @@ namespace Framework.Generic.Tests.IO
         public void JsonEntityFileStringFileSystem_WithEmptyFilePath_ThrowsException()
         {
             // Act
-            _entityFile = new JsonEntityFile<TestEntity>(string.Empty, _mockFileSystem);
+            _entityFile = new JsonEntityFile<TestSerializedJsonEntity>(string.Empty, _mockFileSystem);
         }
 
         [TestMethod]
@@ -75,14 +76,14 @@ namespace Framework.Generic.Tests.IO
         public void JsonEntityFileStringFileSystem_WithNullFileSystem_ThrowsException()
         {
             // Act
-            _entityFile = new JsonEntityFile<TestEntity>(_fakeFilePath, null);
+            _entityFile = new JsonEntityFile<TestSerializedJsonEntity>(_fakeFilePath, null);
         }
 
         [TestMethod]
         public void JsonEntityFileStringFileSystem_WithValidArgs_IsNotNull()
         {
             // Act
-            _entityFile = new JsonEntityFile<TestEntity>(_fakeFilePath, _mockFileSystem);
+            _entityFile = new JsonEntityFile<TestSerializedJsonEntity>(_fakeFilePath, _mockFileSystem);
 
             // Assert
             Assert.IsNotNull(_entityFile);
@@ -103,7 +104,7 @@ namespace Framework.Generic.Tests.IO
         public void GetEntity_WithExistingFile_ReturnsEntity()
         {
             // Arrange
-            var testObj = new TestEntity(111);
+            var testObj = new TestSerializedJsonEntity(111, "fakeName");
             _entityFile.WriteEntity(testObj);
 
             // Act
@@ -111,7 +112,7 @@ namespace Framework.Generic.Tests.IO
 
             // Assert
             Assert.IsNotNull(returnedEntity);
-            Assert.IsTrue(testObj.CurrentValue == returnedEntity.CurrentValue);
+            Assert.IsTrue(testObj.Id == returnedEntity.Id);
         }
 
         #endregion
@@ -121,7 +122,7 @@ namespace Framework.Generic.Tests.IO
         public void WriteEntity_WithNonExistingFile_WritesToNewFile()
         {
             // Arrange
-            var testObj = new TestEntity(111);
+            var testObj = new TestSerializedJsonEntity(111, "fakeName");
 
             // Act
             _entityFile.WriteEntity(testObj);
@@ -130,7 +131,7 @@ namespace Framework.Generic.Tests.IO
 
             // Assert
             Assert.IsNotNull(storedEntity);
-            Assert.IsTrue(testObj.CurrentValue == storedEntity.CurrentValue);
+            Assert.IsTrue(testObj.Id == storedEntity.Id);
         }
 
         [TestMethod]
@@ -138,11 +139,11 @@ namespace Framework.Generic.Tests.IO
         {
             // Arrange
             var firstValue = 111;
-            var testObj = new TestEntity(firstValue);
+            var testObj = new TestSerializedJsonEntity(firstValue, "fakeName");
             _entityFile.WriteEntity(testObj);
 
             var updatedValue = 222;
-            testObj.CurrentValue = updatedValue;
+            testObj.Value = updatedValue;
 
             // Act
             _entityFile.WriteEntity(testObj);
@@ -151,7 +152,7 @@ namespace Framework.Generic.Tests.IO
 
             // Assert
             Assert.IsNotNull(storedEntity);
-            Assert.IsTrue(storedEntity.CurrentValue == updatedValue);
+            Assert.IsTrue(storedEntity.Value == updatedValue);
         }
 
         #endregion
