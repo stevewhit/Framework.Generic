@@ -18,11 +18,9 @@ namespace Framework.Generic.Tests.Builders
 
         private void Initialize()
         {
-            SetupFileReadAllText().SetupFileWriteAllText();
+            SetupFileReadAllText().SetupFileWriteAllText().SetupFileExists();
         }
 
-        #region Setup File.ReadAllText
-        
         public MockFileSystem SetupFileReadAllText()
         {
             Setup(f => f.File.ReadAllText(It.IsAny<string>())).Returns((string filePath) =>
@@ -35,9 +33,6 @@ namespace Framework.Generic.Tests.Builders
 
             return this;
         }
-
-        #endregion
-        #region Setup File.WriteAllText
 
         public MockFileSystem SetupFileWriteAllText()
         {
@@ -52,6 +47,14 @@ namespace Framework.Generic.Tests.Builders
             return this;
         }
 
-        #endregion
+        public MockFileSystem SetupFileExists()
+        {
+            Setup(f => f.File.Exists(It.IsAny<string>())).Returns((string filePath) =>
+            {
+                return StoredFiles.ContainsKey(filePath);
+            });
+
+            return this;
+        }
     }
 }
