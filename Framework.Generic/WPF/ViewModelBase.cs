@@ -1,4 +1,4 @@
-﻿using Framework.Generic.Utility.WPF;
+﻿using Framework.Generic.WPF;
 using System.ComponentModel;
 using System.Windows;
 

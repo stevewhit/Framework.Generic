@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Framework.Generic.Utility.WPF
+namespace Framework.Generic.WPF
 {
     public abstract class ObservableBase : INotifyPropertyChanged
     {

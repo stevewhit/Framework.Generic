@@ -7,11 +7,11 @@ namespace Framework.Generic.Tests.Builders
 {
     public class MockFileSystem : Mock<IFileSystem>
     {
-        private Dictionary<string, string> _storedFiles; 
+        public Dictionary<string, string> StoredFiles; 
 
         public MockFileSystem()
         {
-            _storedFiles = new Dictionary<string, string>();
+            StoredFiles = new Dictionary<string, string>();
 
             Initialize();
         }
@@ -27,10 +27,10 @@ namespace Framework.Generic.Tests.Builders
         {
             Setup(f => f.File.ReadAllText(It.IsAny<string>())).Returns((string filePath) =>
             {
-                if (!_storedFiles.ContainsKey(filePath))
+                if (!StoredFiles.ContainsKey(filePath))
                     throw new FileNotFoundException();
 
-                return _storedFiles[filePath];
+                return StoredFiles[filePath];
             });
 
             return this;
@@ -43,10 +43,10 @@ namespace Framework.Generic.Tests.Builders
         {
             Setup(f => f.File.WriteAllText(It.IsAny<string>(), It.IsAny<string>())).Callback((string filePath, string contents) =>
             {
-                if (!_storedFiles.ContainsKey(filePath))
-                    _storedFiles.Add(filePath, contents);
+                if (!StoredFiles.ContainsKey(filePath))
+                    StoredFiles.Add(filePath, contents);
                 else
-                    _storedFiles[filePath] = contents;
+                    StoredFiles[filePath] = contents;
             });
 
             return this;
