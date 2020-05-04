@@ -78,6 +78,7 @@
     <Compile Include="Logging\LogLevel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\SystemTime.cs" />
+    <Compile Include="WPF\Control Bindings\InvertedBooleanConverter.cs" />
     <Compile Include="WPF\IPage.cs" />
     <Compile Include="WPF\ObservableBase.cs" />
     <Compile Include="WPF\RelayCommand.cs" />

@@ -6,18 +6,20 @@ namespace Framework.Generic.WPF
 {
     public abstract class ObservableBase : INotifyPropertyChanged
     {
-        public void Set<TValue>(ref TValue field,
-                                TValue newValue,
-                                [CallerMemberName] string propertyName = "")
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void Set<TValue>(ref TValue field, TValue newValue, [CallerMemberName] string propertyName = "")
         {
-            if (EqualityComparer<TValue>.Default.Equals(field, default(TValue))
-                || !field.Equals(newValue))
+            if (EqualityComparer<TValue>.Default.Equals(field, default) || !field.Equals(newValue))
             {
                 field = newValue;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                RaisePropertyChanged(propertyName);
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        protected void RaisePropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }
