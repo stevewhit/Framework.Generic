@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace Framework.Generic.Utility
 {
@@ -25,5 +26,10 @@ namespace Framework.Generic.Utility
         {
             Now = () => DateTime.Now;
         }
+
+        /// <summary>
+        /// A system-wide StopWatch
+        /// </summary>
+        public static Stopwatch Stopwatch { get; set; }
     }
 }
