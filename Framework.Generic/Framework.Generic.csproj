@@ -56,6 +56,7 @@
     <Reference Include="System.IO.Abstractions, Version=11.0.0.0, Culture=neutral, PublicKeyToken=96bf224d23c43e59, processorArchitecture=MSIL">
       <HintPath>..\packages\System.IO.Abstractions.11.0.2\lib\net461\System.IO.Abstractions.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Net.Http" />
@@ -72,6 +73,7 @@
     <Compile Include="IO\ISerializedObject.cs" />
     <Compile Include="IO\JsonEntityFile.cs" />
     <Compile Include="Utility\EnumerableUtils.cs" />
+    <Compile Include="Utility\KeyboardUtils.cs" />
     <Compile Include="Utility\NumberUtils.cs" />
     <Compile Include="Utility\ObjectUtils.cs" />
     <Compile Include="Utility\EnumUtils.cs" />

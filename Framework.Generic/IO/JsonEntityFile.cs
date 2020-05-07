@@ -39,7 +39,7 @@ namespace Framework.Generic.IO
         /// <param name="entity">The entity that will be serialized and written to the file.</param>
         public virtual void WriteEntity(FEntity entity)
         {
-            var jsonString = JsonConvert.SerializeObject(entity);
+            var jsonString = JsonConvert.SerializeObject(entity, Formatting.Indented);
             _fileSystem.File.WriteAllText(_filePath, jsonString);
         }
 
