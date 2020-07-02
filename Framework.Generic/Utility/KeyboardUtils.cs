@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
 
 namespace Framework.Generic.Utility
@@ -11,6 +12,7 @@ namespace Framework.Generic.Utility
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
+        [ExcludeFromCodeCoverage]
         public static Keys Consolidate(this Keys key)
         {
             if (key == Keys.LControlKey || key == Keys.RControlKey)
@@ -48,6 +50,7 @@ namespace Framework.Generic.Utility
         /// </summary>
         /// <param name="key">The key to return the user-friendly string value for.</param>
         /// <returns>Returns the user-friendly string value for the supplied <paramref name="key"/>.</returns>
+        [ExcludeFromCodeCoverage]
         public static string GetKeyDescription(this Keys key)
         {
             switch (key)
