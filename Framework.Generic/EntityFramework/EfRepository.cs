@@ -52,8 +52,7 @@ namespace Framework.Generic.EntityFramework
         /// <param name="entities"></param>
         public void AddRange(IEnumerable<TEntity> entities)
         {
-            foreach (var entity in entities)
-                Add(entity);
+            _context.AddRange(entities);
         }
 
         /// <summary>

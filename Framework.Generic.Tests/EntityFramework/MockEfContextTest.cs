@@ -209,18 +209,18 @@ namespace Framework.Generic.Tests.EntityFramework
         }
 
         #endregion
-        #region Testing Create...
+        #region Testing Add...
 
         [TestMethod]
         [ExpectedException(typeof(NullReferenceException))]
-        public void Create_NullEntity_ThrowsException()
+        public void Add_NullEntity_ThrowsException()
         {
             // Act
             _mockContext.Object.Add<TestEntity>(null);
         }
 
         [TestMethod]
-        public void Create_ValidEntity_InsertsEntityIntoDbSet()
+        public void Add_ValidEntity_InsertsEntityIntoDbSet()
         {
             // Arrange
             var entityToAdd = new TestEntity(999);
@@ -235,7 +235,7 @@ namespace Framework.Generic.Tests.EntityFramework
         }
 
         [TestMethod]
-        public void Create_ValidEntity_InsertsEntityIntoDbSetAsVirtual()
+        public void Add_ValidEntity_InsertsEntityIntoDbSetAsVirtual()
         {
             // Arrange
             var entityToAdd = new TestEntity(999);
@@ -248,7 +248,7 @@ namespace Framework.Generic.Tests.EntityFramework
         }
 
         [TestMethod]
-        public void Create_ValidEntity_InsertsVirtualEntityWithAddedState()
+        public void Add_ValidEntity_InsertsVirtualEntityWithAddedState()
         {
             // Arrange
             var entityToAdd = new TestEntity(999);
@@ -258,6 +258,71 @@ namespace Framework.Generic.Tests.EntityFramework
 
             // Assert
             Assert.IsTrue(entityToAdd.State == EntityState.Added, "The entity should've been added to the entities dbset with 'Added' state.");
+        }
+
+        #endregion
+        #region Testing AddRange...
+
+        [TestMethod]
+        [ExpectedException(typeof(NullReferenceException))]
+        public void AddRange_NullEntities_ThrowsException()
+        {
+            // Act
+            _mockContext.Object.AddRange<TestEntity>(null);
+        }
+
+        [TestMethod]
+        public void AddRange_ValidEntities_InsertsEntitiesIntoDbSet()
+        {
+            // Arrange
+            var entityToAdd1 = new TestEntity(111);
+            var entityToAdd2 = new TestEntity(222);
+
+            var entitiesToAdd = new List<TestEntity> { entityToAdd1, entityToAdd2 };
+
+            // Act
+            _mockContext.Object.AddRange(entitiesToAdd);
+
+            var entitiesContainsEntity1 = _mockContext.GetDbSet<TestEntity>().Any(e => e.TestId == entityToAdd1.TestId);
+            var entitiesContainsEntity2 = _mockContext.GetDbSet<TestEntity>().Any(e => e.TestId == entityToAdd2.TestId);
+
+            // Assert
+            Assert.IsTrue(entitiesContainsEntity1, "The entity should've been added to the entities dbset.");
+            Assert.IsTrue(entitiesContainsEntity2, "The entity should've been added to the entities dbset.");
+        }
+
+        [TestMethod]
+        public void AddRange_ValidEntities_InsertsEntitiesIntoDbSetAsVirtual()
+        {
+            // Arrange
+            var entityToAdd1 = new TestEntity(111);
+            var entityToAdd2 = new TestEntity(222);
+
+            var entitiesToAdd = new List<TestEntity> { entityToAdd1, entityToAdd2 };
+
+            // Act
+            _mockContext.Object.AddRange(entitiesToAdd);
+
+            // Assert
+            Assert.IsTrue(entityToAdd1.IsVirtual, "The entity should've been added to the entities dbset as a virtual entity.");
+            Assert.IsTrue(entityToAdd2.IsVirtual, "The entity should've been added to the entities dbset as a virtual entity.");
+        }
+
+        [TestMethod]
+        public void AddRange_ValidEntities_InsertsVirtualEntitiesWithAddedState()
+        {
+            // Arrange
+            var entityToAdd1 = new TestEntity(111);
+            var entityToAdd2 = new TestEntity(222);
+
+            var entitiesToAdd = new List<TestEntity> { entityToAdd1, entityToAdd2 };
+
+            // Act
+            _mockContext.Object.AddRange(entitiesToAdd);
+
+            // Assert
+            Assert.IsTrue(entityToAdd1.State == EntityState.Added, "The entity should've been added to the entities dbset with 'Added' state.");
+            Assert.IsTrue(entityToAdd2.State == EntityState.Added, "The entity should've been added to the entities dbset with 'Added' state.");
         }
 
         #endregion

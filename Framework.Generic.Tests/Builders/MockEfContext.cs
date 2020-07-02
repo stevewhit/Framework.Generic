@@ -22,7 +22,7 @@ namespace Framework.Generic.Tests.Builders
             InitializeDbSets(supportedEntityTypes);
 
             // Setup all mock methods.
-            SetupGet().SetupSetEntityState().SetupGetEntityState().SetupCreate().SetupUpdate().SetupDelete().SetupSaveChanges().SetupSaveChangesAsync().SetupRevertChanges().SetupRevertChangesAsync().SetupDispose();
+            SetupGet().SetupSetEntityState().SetupGetEntityState().SetupAdd().SetupAddRange().SetupUpdate().SetupDelete().SetupSaveChanges().SetupSaveChangesAsync().SetupRevertChanges().SetupRevertChangesAsync().SetupDispose();
         }
         
         /// <summary>
@@ -133,13 +133,13 @@ namespace Framework.Generic.Tests.Builders
                 });
         }
         #endregion
-        #region SetupCreate
-        public MockEfContext SetupCreate()
+        #region SetupAdd
+        public MockEfContext SetupAdd()
         {
-            return CallMethodForAllTypes("SetupCreate");
+            return CallMethodForAllTypes("SetupAdd");
         }
 
-        private void SetupCreate<T>() where T : class, ITestEntity
+        private void SetupAdd<T>() where T : class, ITestEntity
         {
             Setup(c => c.Add<T>(It.IsAny<T>()))
                 .Callback((T entity) =>
@@ -148,6 +148,26 @@ namespace Framework.Generic.Tests.Builders
                     entity.State = EntityState.Added;
 
                     GetDbSet<T>().Add(entity);
+                });
+        }
+        #endregion
+        #region SetupAddRange
+        public MockEfContext SetupAddRange()
+        {
+            return CallMethodForAllTypes("SetupAddRange");
+        }
+
+        private void SetupAddRange<T>() where T : class, ITestEntity
+        {
+            Setup(c => c.AddRange<T>(It.IsAny<IEnumerable<T>>()))
+                .Callback((IEnumerable<T> entities) =>
+                {
+                    foreach (var entity in entities)
+                    {
+                        entity.IsVirtual = true;
+                        entity.State = EntityState.Added;
+                        GetDbSet<T>().Add(entity);
+                    }                    
                 });
         }
         #endregion
